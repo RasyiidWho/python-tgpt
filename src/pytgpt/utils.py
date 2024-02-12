@@ -514,7 +514,7 @@ A typical 'CONTINUE' interaction looks like this:
 
 Please follow these conventions carefully:
 - You have ability to search the web.
-- Always remember to import responsible package for the tasks, especially os.
+- Always remember to import responsible package for the tasks.
 - Ensure that tasks will executed successfully without errors.
 - Decline any tasks that seem dangerous, irreversible, or that you don't understand.
 - Always review the full conversation prior to answering and maintain continuity.
@@ -585,12 +585,15 @@ Current Datetime : {datetime.datetime.now()}
             elif not self.quiet:
                 self.stdout(raw_code)
 
-            raw_code_plus = re.sub(r"(```)(python)?", "", raw_code.replace("check=True", "check=True, shell=True"))
+            raw_code_plus = re.sub(r"(```)(python)?", "", re.sub(r'(subprocess\.(?:run|Popen)\([^)]*)\)', r'\1, shell=True)', raw_code))
 
             if "CONTINUE" in response or not self.internal_exec:
                 self.log("Executing script externally")
                 # path_to_script = os.path.join(default_path, "execute_this.py")
-                path_to_script = os.path.join(user_data_dir(appauthor=False), os.getcwd() + "/execute_this.py")
+                if "C:\\" in str(os.getcwd()):
+                    path_to_script = os.path.join(default_path, "execute_this.py")
+                else:
+                    path_to_script = os.path.join(user_data_dir(appauthor=False), os.getcwd() + "/execute_this.py")
                 with open(path_to_script, "w") as fh:
                     fh.write(raw_code_plus)
                 if "CONTINUE" in response:
