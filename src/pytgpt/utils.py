@@ -10,6 +10,7 @@ import sys
 import click
 from rich.markdown import Markdown
 from rich.console import Console
+from appdirs import user_data_dir
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
@@ -499,7 +500,7 @@ A typical 'CONTINUE' interaction looks like this:
 1. The user gives you a natural language PROMPT.
 2. You:
     i. Determine what needs to be done
-    ii. Determine that you need to see the output of some subprocess call to complete the task
+    ii. Determine that you need to see the output of some subprocess to complete the task
     iii. Write a short Python SCRIPT to print that and then print the word "CONTINUE"
 3. The compiler
     i. Checks and runs your SCRIPT
@@ -512,6 +513,9 @@ A typical 'CONTINUE' interaction looks like this:
 5. The compiler...
 
 Please follow these conventions carefully:
+- You have ability to search the web.
+- Always remember to import responsible package for the tasks, especially os.
+- Ensure that tasks will executed successfully without errors.
 - Decline any tasks that seem dangerous, irreversible, or that you don't understand.
 - Always review the full conversation prior to answering and maintain continuity.
 - If asked for information, just print the information clearly and concisely.
@@ -581,11 +585,12 @@ Current Datetime : {datetime.datetime.now()}
             elif not self.quiet:
                 self.stdout(raw_code)
 
-            raw_code_plus = re.sub(r"(```)(python)?", "", raw_code)
+            raw_code_plus = re.sub(r"(```)(python)?", "", raw_code.replace("check=True", "check=True, shell=True"))
 
             if "CONTINUE" in response or not self.internal_exec:
                 self.log("Executing script externally")
-                path_to_script = os.path.join(default_path, "execute_this.py")
+                # path_to_script = os.path.join(default_path, "execute_this.py")
+                path_to_script = os.path.join(user_data_dir(appauthor=False), os.getcwd() + "/execute_this.py")
                 with open(path_to_script, "w") as fh:
                     fh.write(raw_code_plus)
                 if "CONTINUE" in response:
