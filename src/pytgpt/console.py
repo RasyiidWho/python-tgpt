@@ -2198,7 +2198,7 @@ def make_commands():
 # @this.handle_exception
 def main(*args):
     Console().print(Rule())
-    Console().print(Rule(f"Phind Rawdog (ISO NGUTEK-UTEK SYSTEM)"))
+    Console().print(Rule(f"PYTGPT Rawdog [red]ISO NGUTEK-UTEK SYSTEM[/red]"))
     Console().print(Rule())
     Console().print()
     Console().print()
