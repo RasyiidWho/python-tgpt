@@ -23,6 +23,7 @@ from rich.console import Console
 from rich.live import Live
 from rich.table import Table
 from rich.prompt import Prompt
+from rich.rule import Rule
 from typing import Iterator
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
@@ -307,11 +308,11 @@ class busy_bar:
 
 
 class Main(cmd.Cmd):
-    intro = (
-        "Welcome to AI Chat in terminal. "
-        "Type 'help' or 'h' for usage info.\n"
-        f"Submit any bug at {pytgpt.__repo__}/issues/new"
-    )
+    # intro = (
+    #     "Welcome to AI Chat in terminal. "
+    #     "Type 'help' or 'h' for usage info.\n"
+    #     f"Submit any bug at {pytgpt.__repo__}/issues/new"
+    # )
 
     def __init__(
         self,
@@ -617,10 +618,13 @@ class Main(cmd.Cmd):
         self.__start_time = time.time()
         self.__end_time = time.time()
 
+
     @property
     def prompt(self):
         current_time = datetime.datetime.now().strftime("%H:%M:%S")
-
+        Console().print()
+        Console().print(Rule())
+        Console().print()
         def find_range(start, end, hms: bool = False):
             in_seconds = round(end - start, 1)
             return (
@@ -631,13 +635,15 @@ class Main(cmd.Cmd):
 
         if not self.disable_coloring:
             cmd_prompt = (
-                f"╭─[`{Fore.CYAN}{getpass.getuser().capitalize()}@pyTGPT]`"
-                f"(`{Fore.MAGENTA}{self.provider})`"
-                f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
-                f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
-                f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
-                f"\n╰─>"
+                # f"╭─[`{Fore.CYAN}{getpass.getuser().capitalize()}]`"
+                # f"(`{Fore.MAGENTA}{self.provider})`"
+                # f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
+                # f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
+                # f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
+                # f"\n╰─>"
+                f"🩸  {Fore.RED}[PYTGPT RawDog][{os.getcwd()}] KOE\n{Fore.RED}❯ "
             )
+
             whitelist = ["[", "]", "~", "-", "(", ")"]
             for character in whitelist:
                 cmd_prompt = cmd_prompt.replace(character + "`", Fore.RESET + character)
@@ -1189,10 +1195,8 @@ class ChatInteractive:
         default=this.default_provider,
         help="Name of LLM provider.",
         metavar=(
-            f"[{'|'.join(pytgpt.tgpt_providers)}] etc, "
-            "run 'pytgpt gpt4free list providers -w' to "
-            "view more providers and 'pytgpt gpt4free test -y' "
-            "for advanced g4f providers test"
+            f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
+            "run 'pytgpt gpt4free list providers -w' to view more providers"
         ),
     )
     @click.option(
@@ -1487,10 +1491,8 @@ class ChatGenerate:
         default=this.default_provider,
         help="Name of LLM provider.",
         metavar=(
-            f"[{'|'.join(pytgpt.tgpt_providers)}] etc, "
-            "run 'pytgpt gpt4free list providers -w' to "
-            "view more providers and 'pytgpt gpt4free test -y' "
-            "for advanced g4f providers test"
+            f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
+            "run 'pytgpt gpt4free list providers -w' to view more providers"
         ),
     )
     @click.option(
@@ -2195,6 +2197,11 @@ def make_commands():
 
 # @this.handle_exception
 def main(*args):
+    Console().print(Rule())
+    Console().print(Rule(f"Phind Rawdog (ISO NGUTEK-UTEK SYSTEM)"))
+    Console().print(Rule())
+    Console().print()
+    Console().print()
     """Fireup console programmically"""
     sys.argv += list(args)
     args = sys.argv
